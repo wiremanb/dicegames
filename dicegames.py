@@ -72,6 +72,24 @@ def printGameMenu(opt):
           "5. Pass (p) - only available in Pig\n" \
           "6. Quit (q)\n"
 
+def printScores():
+    global _playerScores
+    print "-----Current Scores-----\n" \
+          "Player 1: {0}\n" \
+          "Player 2: {1}\n" \
+          "------------------------\n".format(_playerScores["Player 1"][0], _playerScores["Player 2"][0])
+
+def resetGame():
+    global _playerScores
+    global _currentPlayer
+    global _nextPlayer
+    _playerScores["Player 1"][0] = 0
+    _playerScores["Player 1"][1] = True
+    _playerScores["Player 2"][0] = 0
+    _playerScores["Player 2"][1] = True
+    _currentPlayer = "Player 1"
+    _nextPlayer = "Player 2"
+
 """
 Role die or dice depending on which game it is
 """
@@ -146,37 +164,40 @@ def playGame():
         if userInput == "Roll" or userInput == "roll" or userInput == "r":
             if _currentGame == "Fifty":
                 evaluateDieValues("Fifty", roleDice(2))
-                if _playerScores[_currentPlayer][0] >= _winningValue:
-                    print "CONGRATULATIONS {0}!!! YOU WON!!!!\n".format(_currentPlayer)
+                if _playerScores[_currentPlayer][0] >= int(_winningValue):
+                    print "\nCONGRATULATIONS {0}!!! YOU WON!!!!\n".format(_currentPlayer)
+                    printScores()
+                    print
                     exitGame = True
+
                 elif _playerScores[_currentPlayer][0] == -99:
-                    print "{0} rolled a pair of 3s... your score is now 0! Better luck next time! :(\n".format(_currentPlayer)
+                    print "\n{0} rolled a pair of 3s... your score is now 0! Better luck next time! :(\n".format(_currentPlayer)
                     _playerScores[_currentPlayer][0] = 0
+
                 else:
                     print "{0} score: {1}\n".format(_currentPlayer, _playerScores[_currentPlayer][0])
                     swapPlayers()
+
             else: # Else the game is Pig
                 evaluateDieValues("Pig", roleDice(1))
-                if _playerScores[_currentPlayer][0] >= _winningValue:
-                    print "CONGRATULATIONS {0}!!! YOU WON!!!!\n".format(_currentPlayer)
+                if _playerScores[_currentPlayer][0] >= int(_winningValue):
+                    print "\nCONGRATULATIONS {0}!!! YOU WON!!!!\n".format(_currentPlayer)
+                    printScores()
+                    print
                     exitGame = True
                 elif _playerScores[_currentPlayer][0] == 0:
-                    print "{0} rolled a 1.. your score is now 0! Better luck next time! :(\n".format(_currentPlayer)
+                    print "\n{0} rolled a 1.. your score is now 0! Better luck next time! :(\n".format(_currentPlayer)
                     swapPlayers()
                 elif _playerScores[_currentPlayer][0] == -99:
-                    print "{0} rolled a 1 on the first try!! Your luck is the worst I have ever seen. GAME OVER!!!!! " \
-                          "XD\n".format(_currentPlayer)
+                    print "\n{0} rolled a 1 on the first try!! Your luck is the worst I have ever seen. GAME OVER!!!!! XD\n".format(_currentPlayer)
                     exitGame = True
                 else:
-                    print "{0} score: {1}\n".format(_currentPlayer, _playerScores[_currentPlayer][0])
+                    print "\n{0} score: {1}\n".format(_currentPlayer, _playerScores[_currentPlayer][0])
 
         elif userInput == "Score" or userInput == "score" or userInput == "s":
-            print "-----Current Scores-----\n" \
-                  "Player 1: {0}\n" \
-                  "Player 2: {1}\n"\
-                  "------------------------\n".format(_playerScores["Player 1"][0], _playerScores["Player 2"][0])
+            printScores()
 
-        elif userInput == "Description" or userInput == "description" or userInput == "d":
+        elif userInput == "\nDescription" or userInput == "description" or userInput == "d":
             printGameDescription(_currentGame)
 
         elif userInput == "Instructions" or userInput == "instructions" or userInput == "i":
@@ -215,12 +236,11 @@ def main():
     global _nextPlayer
     global _currentGame
     global _winningValue
+    global _playerScores
     while quit is False:
-        _currentPlayer = "Player 1"
-        _nextPlayer = "Player 2"
+        resetGame()
         printGameChoices()
         userInput = raw_input("Which game would you like to play? ")
-
         if userInput == "Fifty" or userInput == "fifty" or userInput == "f":
             _currentGame = "Fifty"
             print "You have chosen to play the game Fifty. May the odds be ever in your favor!\n"
