@@ -3,6 +3,7 @@
 Application Name: Dice Games
 Author:           Benjamin Wireman
 Date Created:     2017-03-30
+Class/Section:    CS 424 02
 Last Edited By:   Benjamin Wireman
 Last Edited Date: 2017-03-30
 Description:      This application allows two players to play their choice of the games Fifty or Pig.
